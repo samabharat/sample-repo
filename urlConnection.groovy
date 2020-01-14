@@ -7,27 +7,25 @@ import java.net.URLConnection;
 
 String url = "http://here"
 
-def getData(String url,
-                   String userName,
-                   String password) {
-    def authString = ("${userName}:${password}").getBytes().encodeBase64().toString()
-    def connection = (url).toURL().openConnection()
-    connection.addRequestProperty('Authorization', 'Basic ' + authString)
-//    connection.addRequestProperty('Content-Type', 'application/json')
-    connection.setRequestMethod('GET')
-    connection.setReadTimeout(30000)
+def getData(String url, String userName, String password) {
+    
+    def https = new RESTClient(url)
+    https.auth.basic(userName, password)
     try {
-        connection.connect()
-        def reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))
-          String line = null;
-          while ((line = reader.readLine()) != null) {
-              System.out.println(line);
+        def resp = https.get(
+            requestContentType: URLENC,
+            headers: ['Content-Type': 'application/x-www-form-urlencoded']
+        )
+    
+        def response = []
+        resp.data.each{ it ->
+            response.add(it)
           }
-          inputStream.close();
-           
-    } finally {
-        connection.disconnect();
-    }
+        return response
+    } catch(HttpResponseException e) {
+        r = e.response
+        println("Status:  $r.status")
+    } 
 }
 
 def myData = getData(url,"username","password")
