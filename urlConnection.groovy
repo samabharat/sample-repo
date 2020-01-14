@@ -1,10 +1,9 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-
+@Grab(group='org.codehaus.groovy.modules.http-builder',module='http-builder', version='0.7.1')
+import groovyx.net.http.RESTClient
+import static groovyx.net.http.ContentType.URLENC
+import groovyx.net.http.RESTClient
+import groovyx.net.http.HttpResponseException
+import static groovyx.net.http.ContentType.*
 String url = "http://here"
 
 def getData(String url, String userName, String password) {
